@@ -1,0 +1,28 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+<div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+    <h2 class="headline m-0" fxFlex="auto">{{ data.title }}</h2>
+</div>
+
+<mat-divider class="-mx-6 text-border"></mat-divider>
+
+<mat-dialog-content fxLayout="column">
+
+    <mat-form-field class="mt-6" fxFlex>
+        <mat-label>Taşınacak kategoriyi seçin</mat-label>
+        <mat-select [(ngModel)]="selectedCat" cdkFocusInitial>
+            <mat-option *ngFor="let cat of menuCats" [value]="cat.id">
+                <mat-icon [icIcon]="cat.icon" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon>
+                {{cat.label}}
+                <small class="text-red-500" *ngIf="cat.id === 1">(Tüm kullanıcılara açık)</small>
+            </mat-option>
+        </mat-select>
+        <!-- <mat-icon [icIcon]="icCategory" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon> -->
+        <!-- <input cdkFocusInitial matInput>
+                <mat-icon [icIcon]="icPerson" class="ltr:mr-3 rtl:ml-3" matPrefix></mat-icon> -->
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">İPTAL</button>
+    <button (click)="moveCats()" color="primary" [disabled]="isLoading" mat-button>SEÇİLEN ({{accounts.length}}) HESABI TAŞI</button>
+</mat-dialog-actions>

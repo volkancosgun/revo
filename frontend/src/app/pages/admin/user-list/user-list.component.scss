@@ -1,0 +1,22 @@
+.rol-admin {
+    color: red;
+}
+
+.rol-user {
+    color: black;
+}
+
+.user-status-active {
+    color: rgb(76, 175, 80);
+    background-color: rgb(76, 175, 80, 0.098);
+}
+
+.user-status-banned {
+    color: rgb(255, 0, 0);
+    background-color: rgb(255, 0, 0, 0.098);
+}
+
+.user-status-pending {
+    color: rgb(255, 133, 5);
+    background-color: rgb(255, 133, 5, 0.098);
+}

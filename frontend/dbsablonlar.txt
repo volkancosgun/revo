@@ -1,0 +1,17 @@
+# accounts
+- id (int)
+- email (str)
+- pass (str)
+- ref_user (int)
+- label (int)
+- status (int)
+1: bekliyor
+2: kullanıldı
+3: çöp
+-1: silindi
+
+# accounts_label
+- id(int)
+- user(int)
+- name (str)
+- 

@@ -1,0 +1,27 @@
+<!-- <div mat-dialog-content>
+    {{message}}
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">No</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Yes</button> -->
+
+<!-- <vex-secondary-toolbar current="Dialogs">
+        <vex-breadcrumbs [crumbs]="['Components', 'Dialogs']"></vex-breadcrumbs>
+    </vex-secondary-toolbar> -->
+
+
+
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div [innerHtml]="data.title"></div>
+</div>
+
+<mat-dialog-content>
+
+    <p [innerHtml]="data.msg"></p>
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onNoClick()">{{data.btnCancelText || 'Hayır'}}</button>
+    <button mat-button color="primary" [mat-dialog-close]="true">{{data.btnOkText || 'Evet'}}</button>
+</mat-dialog-actions>

@@ -1,0 +1,79 @@
+<div class="w-full h-full bg-pattern" fxLayout="column" fxLayoutAlign="center center">
+    <div @fadeInUp class="card overflow-hidden w-full max-w-xs">
+        <div class="p-6 pb-0" fxLayout="column" fxLayoutAlign="center center">
+            <div class="fill-current text-center">
+                <img class="w-16" src="assets/img/demo/logo.svg">
+            </div>
+        </div>
+
+        <div class="text-center mt-4 p-6" *ngIf="!isRegister">
+            <h1 class="title m-0">Tebrikler! {{userName}}</h1>
+            <h2 class="title m-0">Hesabınız başarıyla oluşturuldu.</h2>
+            <h4 class="body-2 text-secondary m-0"><a [routerLink]="['/auth/login']">‹ Oturum açma ekranına git</a></h4>
+        </div>
+
+        <div class="text-center mt-4" *ngIf="isRegister">
+            <h2 class="title m-0">Yeni hesap oluştur</h2>
+            <h4 class="body-2 text-secondary m-0">Aşağıdaki formu doldurmanız yeterli.</h4>
+        </div>
+
+        <div [formGroup]="form" class="p-6" fxLayout="column" fxLayoutGap="16px" *ngIf="isRegister">
+            <div fxFlex="auto" fxLayout="column">
+                <mat-form-field fxFlex="grow">
+                    <mat-label>Tam Adı</mat-label>
+                    <input formControlName="name" matInput required>
+                    <mat-error *ngIf="form.get('name').hasError('required')">
+                        Lütfen tam adınızı giriniz!
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="grow">
+                    <mat-label>E-Mail</mat-label>
+                    <input formControlName="email" matInput required autocomplete="off">
+                    <mat-error *ngIf="form.get('email').hasError('required')">
+                        Kayıt için E-Mail adresinizi giriniz!
+                    </mat-error>
+                    <mat-error *ngIf="form.get('email').hasError('email')">
+                        Hatalı E-mail.
+                    </mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field fxFlex="grow">
+                    <mat-label>Şifre</mat-label>
+                    <input [type]="inputType" formControlName="password" matInput required autocomplete="new-password">
+                    <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Görünürlüğü Değiştir" type="button">
+              <mat-icon *ngIf="visible" [icIcon]="icVisibility"></mat-icon>
+              <mat-icon *ngIf="!visible" [icIcon]="icVisibilityOff"></mat-icon>
+            </button>
+                    <mat-hint>Şifreleri görünür yapmak için göze tıklayın</mat-hint>
+                    <mat-error *ngIf="form.get('password').hasError('minlength')">
+                        Şifre en az (6) karakter olmalı.
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="grow">
+                    <mat-label>Şifre (Tekrar)</mat-label>
+                    <input [errorStateMatcher]="passwordsMatcher" [type]="inputType" formControlName="password_confirmation" matInput>
+                    <button (click)="toggleVisibility()" mat-icon-button matSuffix matTooltip="Görünürlüğü Değiştir" type="button">
+              <mat-icon *ngIf="visible" [icIcon]="icVisibility"></mat-icon>
+              <mat-icon *ngIf="!visible" [icIcon]="icVisibilityOff"></mat-icon>
+              
+            </button>
+                    <mat-error *ngIf="form.hasError('passwordsNotEqual')">Şifreler eşleşmiyor!</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="center center">
+                <mat-checkbox class="caption" name="acceptTerms" formControlName="acceptTerms">Tüm <a>şartları ve koşulları</a> kabul ediyorum.</mat-checkbox>
+            </div>
+            <button [disabled]="!form.valid" (click)="send()" color="primary" mat-raised-button type="button">
+          HESABI OLUŞTUR
+        </button>
+            <p class="text-secondary text-center">
+                Zaten hesabınız var mı?<br/>
+                <a [routerLink]="['/auth/login']">Oturum açın</a>
+            </p>
+        </div>
+    </div>
+</div>
