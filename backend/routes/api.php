@@ -37,6 +37,7 @@ Route::group([
     Route::post('deleting', 'Accounts\AccountsController@deleteAccounts');
     Route::post('moving', 'Accounts\AccountsController@moveAccounts');
     Route::post('store/{update?}', 'Accounts\AccountsController@store');
+    Route::post('webstore', 'Accounts\AccountsController@storeWeb');
 
 });
 

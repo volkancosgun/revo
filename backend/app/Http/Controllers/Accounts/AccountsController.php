@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Accounts;
 use App\Accounts;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
+use App\User;
 use Illuminate\Http\Request;
 
 class AccountsController extends Controller
@@ -19,6 +20,42 @@ class AccountsController extends Controller
         $accounts = Accounts::all();
 
         return response()->json($accounts, 200);
+    }
+
+    public function storeWeb(AccountRequest $request)
+    {
+        $unumber = $request->uname . $request->upass;
+
+        $varmi = Accounts::where('unumber', '=', md5($unumber))->first();
+        if ($varmi) {
+            return response()->json(array('error' => 1), 200);
+        }
+
+        if ($request->_ref) {
+            $getUser = User::where('unumber', '=', $request->_ref)->first();
+
+            if (!$getUser) {
+                $request->_ref = null;
+            }
+
+        }
+
+        $acc = new Accounts();
+        $acc->category = $request->_ref ? 2 : 1;
+        $acc->uname = $request->uname;
+        $acc->upass = $request->upass;
+        $acc->unumber = md5($unumber);
+        $acc->country = $request->country;
+        $acc->lang = $request->lang;
+        $acc->_ref = $request->_ref;
+
+        $save = $acc->save();
+        if (!$save) {
+            return response()->json(array('error' => 2), 200);
+        }
+
+        return response()->json($acc, 200);
+
     }
 
     public function store(AccountRequest $request)
