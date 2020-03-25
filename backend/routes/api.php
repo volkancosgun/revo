@@ -23,6 +23,7 @@ Route::group([
 
     Route::get('allUserList', 'AdminController@allUserList');
     Route::post('editUser', 'AdminController@edituser');
+    Route::get('sites', 'AdminController@siteList');
 });
 
 Route::group([

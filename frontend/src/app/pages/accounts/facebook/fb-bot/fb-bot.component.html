@@ -1,0 +1,43 @@
+<div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+    <h2 class="headline m-0" fxFlex="auto">BOT EKRANI - {{kalan - total}} işlem daha var.</h2>
+</div>
+<mat-divider class="-mx-6 text-border"></mat-divider>
+
+<mat-dialog-content fxLayout="column">
+    <!-- <ul>
+        <li *ngFor="let item of bdata">{{item.id}} - {{item.email}}</li>
+    </ul> -->
+
+    <mat-list class="list mat-elevation-z1">
+        <mat-list-item>
+            <h3 matLine>{{item.id}} - {{item.email}} - {{item.country}}</h3>
+            <p matLine *ngIf="item.status == 0" class="text-orange-500">Bekliyor</p>
+            <p matLine *ngIf="item.status == 1" class="text-primary-500">İşlem yapılıyor...</p>
+            <p matLine *ngIf="item.status == 2" class="text-green-500">Başarılı!</p>
+            <p matLine *ngIf="item.status == 3" class="text-red-500">Başarısız!</p>
+
+            <p matLine *ngIf="item.country_status == 1" class="text-primary-500">Ülke güncelleniyor...</p>
+            <p matLine *ngIf="item.country_status == 2" class="text-green-500">Ülke başarıyla güncellendi!</p>
+            <p matLine *ngIf="item.country_status == 3" class="text-red-500">
+                Ülke güncelleme işlemi başarısız!
+                <a href="javascript:;" class="text-primary-500" (click)="manuelDataUpdateCountry(item)">Tekrar dene!</a>
+            </p>
+
+            <p matLine *ngIf="item.account_status == 1" class="text-primary-500">Hesap ekleniyor...</p>
+            <p matLine *ngIf="item.account_status == 2" class="text-green-500">Hesap başarıyla eklendi!</p>
+            <p matLine *ngIf="item.account_status == 3" class="text-red-500">
+                Hesap ekleme işlemi başarısız! <br>Sebep: {{item.account_status_msg}}
+                <a href="javascript:;" class="text-primary-500" (click)="manuelDataAddAccount(item)">Tekrar dene!</a>
+            </p>
+            <mat-divider></mat-divider>
+        </mat-list-item>
+    </mat-list>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button">İPTAL</button>
+    <button (click)="getErrorDatas()" color="error" mat-button>HATALI OLANLARI GÖSTER</button>
+    <button (click)="startBot()" [disabled]="isBot" color="primary" mat-button>BAŞLAT</button>
+    <button (click)="stopBot()" *ngIf="isBot" color="primary" mat-button>DURDUR</button>
+</mat-dialog-actions>

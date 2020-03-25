@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpBackend } from '@angular/common/http';
 import { FbAccount } from '../_models/fb-account';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -8,7 +8,8 @@ import { environment } from 'src/environments/environment';
 export class AccountsService {
 
     constructor(
-        private _http: HttpClient
+        private _http: HttpClient,
+        private handler: HttpBackend
     ) {
 
     }
@@ -54,6 +55,15 @@ export class AccountsService {
     movingAccounts(ids: any[], category:number, ref:string) {
         const _ids = JSON.stringify(ids);
         return this._http.post(`${environment.apiUrl}/accounts/moving`, { movIds: ids, movCat:category, _ref:ref });
+    }
+
+    getAccountCountry(ip) {
+        this._http = new HttpClient(this.handler);
+        return this._http.get(`https://ip.nf/${ip}.json`);
+    }
+
+    getAllBot() {
+        return this._http.get(`http://localhost/php_bot/read.php`);
     }
 
 }

@@ -4,6 +4,9 @@
             <button (click)="openMenu()" @scaleIn class="sm:hidden text-primary-contrast-500" mat-icon-button type="button">
                     <mat-icon [icIcon]="icMenu"></mat-icon>
                   </button>
+            <!-- fb-bot-->
+            <!-- <vex-fb-bot></vex-fb-bot> -->
+            <button (click)="openBot()">BOT EKRANI</button>
             <h2 class="headline text-primary-contrast-500 m-0 flex items-center w-full max-w-xxxs mr-6">
                 <ic-icon @scaleIn [icon]="icContacts" class="hidden sm:block"></ic-icon>
                 <span @fadeInRight class="ml-4 block">Hesaplar</span>
@@ -15,6 +18,8 @@
             </div>
         </div>
     </div>
+
+
 
     <div class="-mt-14 pt-0 overflow-hidden flex" vexContainer>
         <mat-drawer-container class="bg-transparent flex-auto flex">

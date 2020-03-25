@@ -23,6 +23,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { FbAccountMoveComponent } from './facebook/fb-account-move/fb-account-move.component';
+import { FbBotComponent } from './facebook/fb-bot/fb-bot.component';
+import { FbAccountDataServerComponent } from './facebook/fb-account-data-server/fb-account-data-server.component';
 
 @NgModule({
   declarations: [
@@ -30,11 +32,14 @@ import { FbAccountMoveComponent } from './facebook/fb-account-move/fb-account-mo
     FbTableMenuComponent,
     FbAccountEditComponent,
     FbAccountDataComponent,
-    FbAccountMoveComponent
+    FbAccountMoveComponent,
+    FbBotComponent,
+    FbAccountDataServerComponent
   ],
   entryComponents: [
     FbAccountEditComponent,
-    FbAccountMoveComponent
+    FbAccountMoveComponent,
+    FbBotComponent
   ],
   imports: [
     CommonModule,

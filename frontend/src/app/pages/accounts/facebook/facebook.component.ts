@@ -20,7 +20,12 @@ import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-dialog/confirmation-dialog.component';
 import { ProgressDialogComponent } from 'src/app/shared/progress-dialog/progress-dialog.component';
 import { FbAccountMoveComponent } from 'src/app/pages/accounts/facebook/fb-account-move/fb-account-move.component';
-
+import { Subject } from 'rxjs/internal/Subject';
+import { startWith } from 'rxjs/internal/operators/startWith';
+import { switchMap } from 'rxjs/internal/operators/switchMap';
+import { timer } from 'rxjs/internal/observable/timer';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { FbBotComponent } from 'src/app/pages/accounts/facebook/fb-bot/fb-bot.component';
 
 @Component({
   selector: 'vex-facebook',
@@ -33,6 +38,7 @@ import { FbAccountMoveComponent } from 'src/app/pages/accounts/facebook/fb-accou
   ]
 })
 export class FacebookComponent implements OnInit {
+
   icContacts = icContacts;
   icSearch = icSearch;
   icStar = icStar;
@@ -87,6 +93,12 @@ export class FacebookComponent implements OnInit {
       cssClasses: ['text-secondary']
     },
     {
+      label: 'NOT',
+      property: 'unote',
+      type: 'text',
+      cssClasses : ['text-secondary']
+    },
+    {
       label: '',
       property: 'starred',
       type: 'button',
@@ -112,6 +124,8 @@ export class FacebookComponent implements OnInit {
 
     this.selectUser = this.me;
     this.getData();
+
+
 
   }
 
@@ -192,6 +206,13 @@ export class FacebookComponent implements OnInit {
     this.getData();
   }
 
+  openBot() {
+    const dialogRef = this.dialog.open(FbBotComponent, {
+      width: '480px',
+      disableClose : true
+    })
+  }
+
   moveAccounts(accounts: FbAccount[]) {
     let _moveIds = [];
     let _dialogTitle = `Toplu Hesap Taşıma İşlemi`;
@@ -216,8 +237,8 @@ export class FacebookComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(res => {
-      
-      if(res) {
+
+      if (res) {
         _moveIds.forEach(movAccId => {
 
           this.tableData = this.tableData.filter((val, key) => {

@@ -34,6 +34,7 @@ import { UserAddComponent } from './user-add/user-add.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AdminService } from './_services/admin.service';
 import { UserCreateUpdateComponent } from './user-list/user-create-update/user-create-update.component';
+import { AdminSitesTableComponent } from './settings/admin-sites-table/admin-sites-table.component';
 
 
 
@@ -73,7 +74,8 @@ import { UserCreateUpdateComponent } from './user-list/user-create-update/user-c
         UserListComponent,
         UserAddComponent,
         SettingsComponent,
-        UserCreateUpdateComponent
+        UserCreateUpdateComponent,
+        AdminSitesTableComponent
     ],
     entryComponents: [
         UserCreateUpdateComponent

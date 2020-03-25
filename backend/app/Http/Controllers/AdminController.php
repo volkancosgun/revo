@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Sites;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 
@@ -20,18 +21,16 @@ class AdminController extends Controller
 
     }
 
-    public function editUser(Request $data) {
+    public function editUser(Request $data)
+    {
 
-        
-        if(isset($data) && !$data->id) {
+        if (isset($data) && !$data->id) {
             return response()->json(array('error' => true), 200);
         }
 
         $user = User::find($data->id);
 
-
-       
-        $user->name = $data->name; 
+        $user->name = $data->name;
         $user->email = $data->email;
         $user->role = $data->role;
         $user->status = $data->status;
@@ -39,11 +38,20 @@ class AdminController extends Controller
 
         $updateUser = $user->save();
 
-        if($updateUser) {
+        if ($updateUser) {
             return response()->json($user, 200);
         }
 
         return response()->json(array('error' => true), 200);
+
+    }
+
+    public function siteList()
+    {
+
+        $sites = Sites::all();
+
+        return response()->json($sites, 200);
 
     }
 

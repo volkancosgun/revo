@@ -54,7 +54,7 @@
                     <th *matHeaderCellDef mat-header-cell mat-sort-header> {{ column.label }}</th>
                     <td *matCellDef="let row" [class.font-medium]="!row.read" [ngClass]="column.cssClasses" mat-cell>
                         <span *ngIf="column.property != 'created_at'">{{ row[column.property] }}</span>
-                        <span *ngIf="column.property == 'created_at'"> {{row[column.property] | date: 'dd/MM/yyyy hh:mm'}} </span>
+                        <span *ngIf="column.property == 'created_at'"> {{row[column.property] | date: 'dd/MM/yyyy HH:mm'}} </span>
 
 
                     </td>
