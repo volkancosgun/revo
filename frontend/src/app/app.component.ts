@@ -89,6 +89,12 @@ export class AppComponent {
         icon: icLayers
       },
       {
+        type: 'link',
+        label: 'Hesaplar',
+        route: '/accounts/facebook',
+        icon: facebookIcon
+      },
+      /* {
         type: 'subheading',
         label: 'Hesaplar',
         children: [
@@ -99,7 +105,7 @@ export class AppComponent {
             icon: facebookIcon
           }
         ]
-      },
+      }, */
       /* {
         type: 'subheading',
         label: 'Hesaplar',

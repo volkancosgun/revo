@@ -89,6 +89,75 @@ class AccountsController extends Controller
 
     }
 
+    public function customListing(Request $request)
+    {
+
+        // Hesap kategorisi
+        $_cat = $request->input('category');
+
+        // Hesap kullanıcı referansı
+        $_ref = $request->input('ref');
+
+        // Sıralama (desc veya asc)
+        $_sortOrder = $request->input('sortOrder');
+
+        // Sıralama sutunu
+        $_sortField = $request->input('sortField') ?: 'id';
+
+        // Sayfa numarasi
+        $_pageNumber = $request->input('pageNumber');
+
+        // Toplam veri
+        $_pageSize = $request->input('pageSize');
+
+        // Toplam db verisi
+        //$totalData = Accounts::count();
+        $offset = $_pageNumber * $_pageSize;
+
+        if ($_cat == 1) {
+            $_accWhere = ['category' => $_cat, 'status' => 1];
+        } else {
+            $_accWhere = ['category' => $_cat, '_ref' => $_ref, 'status' => 1];
+        }
+
+        $totalData = Accounts::where($_accWhere)->count();
+
+        $_filters = $request->input('filter');
+        $_filters_docede = json_decode($_filters);
+
+        if (count((array) $_filters_docede) >= 1) {
+
+            foreach ($_filters_docede as $key => $term) {
+                $accounts = Accounts::where(function($query) use ($key, $term){
+                    $query->where('uname', "LIKE", "%{$term}%")
+                    ->orWhere('upass', "LIKE", "%{$term}%")
+                    ->orWhere('unote', "LIKE", "%{$term}%");
+                })->offset($offset)
+                ->where($_accWhere)
+                ->limit($_pageSize)
+                ->orderBy($_sortField, $_sortOrder)
+                ->get();
+            }
+
+            $totalData = $accounts->count();
+
+        } else {
+            $accounts = Accounts::offset($offset)
+                ->limit($_pageSize)
+                ->where($_accWhere)
+                ->orderBy($_sortField, $_sortOrder)
+                ->get();
+        }
+
+        $data = array();
+
+        $data['totalCount'] = $totalData;
+        $data['items'] = $accounts;
+
+        return response()->json($data, 200);
+
+    }
+
     public function customList(Request $request)
     {
 

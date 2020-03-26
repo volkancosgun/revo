@@ -1,1 +1,144 @@
-<p>fb-account-data-server works!</p>
+<div class="h-full relative" vexScrollbar>
+    <div class="tablescr" fxLayout="column" fxLayoutAlign="space-between">
+        <div class="bg-app-bar px-6 h-16 border-b sticky left-0" fxLayout="row" fxLayoutAlign="start center">
+            <h2 class="title my-0 ltr:pr-4 rtl:pl-4 ltr:mr-4 rtl:ml-4 ltr:border-r rtl:border-l" fxFlex="none" fxHide.xs>
+                <span *ngIf="selection.isEmpty()">{{category?.label}}</span>
+                <span *ngIf="selection.hasValue()">{{ selection.selected.length }}
+                                Hesap<span *ngIf="selection.selected.length > 1">lar</span> seçildi</span>
+            </h2>
+
+            <div *ngIf="selection.hasValue()" class="mr-4 pr-4 border-r" fxFlex="none">
+                <button (click)="deleteAccounts()" color="primary" mat-icon-button matTooltip="Seçilenleri sil" type="button">
+                                    
+                    <mat-icon [icIcon]="icDeleteForever"></mat-icon>
+                              </button>
+                <button (click)="moveAccounts()" color="primary" mat-icon-button matTooltip="Seçilenleri taşı" type="button">
+                                        
+                    <mat-icon [icIcon]="icMove"></mat-icon>
+                                  </button>
+
+                <!-- <button color="primary" mat-icon-button matTooltip="Another action" type="button">
+                                <mat-icon [icIcon]="icFolder"></mat-icon>
+                              </button> -->
+            </div>
+
+            <div fx-layout="row" fx-flex fx-layout-align="end">
+                <h2 class="title my-0 ltr:pr-4 ltr:mr-4" fxFlex="none" xHide.xs>
+                    <small class="text-secondary" *ngIf="selection.isEmpty()">Bu kategoride toplam <strong class="text-red-500">{{dataSource.paginatorTotal$ | async}}</strong> hesap bulundu.</small>
+                </h2>
+            </div>
+        </div>
+
+        <!-- TABLE -->
+        <table [@stagger]="dataSource.baseFilter" class="w-full" fxFlex="auto" [dataSource]="dataSource" matSort mat-table matSortActive="id" matSortDirection="desc" matSortDisableClear>
+
+            <!-- Seçim kutusu -->
+            <ng-container matColumnDef="checkbox">
+                <th *matHeaderCellDef mat-header-cell>
+                    <mat-checkbox color="primary" (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()">
+                    </mat-checkbox>
+                </th>
+                <td *matCellDef="let row" class="w-4" mat-cell>
+                    <mat-checkbox color="primary" (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+
+            <!-- Tarih -->
+            <ng-container matColumnDef="created_at">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header> TARİH </th>
+                <td *matCellDef="let item" class="text-secondary" mat-cell>
+                    {{item.created_at | date: 'dd/MM/yyyy HH:mm'}}
+                </td>
+            </ng-container>
+
+            <!-- Login -->
+            <ng-container matColumnDef="uname">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header> LOGIN </th>
+                <td *matCellDef="let item" mat-cell>
+                    {{item.uname}}
+                </td>
+            </ng-container>
+
+            <!-- Pass -->
+            <ng-container matColumnDef="upass">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header> PASS </th>
+                <td *matCellDef="let item" mat-cell>
+                    {{item.upass}}
+                </td>
+            </ng-container>
+
+            <!-- Ulke -->
+            <ng-container matColumnDef="country">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header> ÜLKE </th>
+                <td *matCellDef="let item" mat-cell>
+                    {{item.country}}
+                </td>
+            </ng-container>
+
+            <!-- Dil -->
+            <ng-container matColumnDef="lang">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header> DİL </th>
+                <td *matCellDef="let item" mat-cell>
+                    {{item.lang}}
+                </td>
+            </ng-container>
+
+            <!-- Not -->
+            <ng-container matColumnDef="unote">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header> NOT </th>
+                <td *matCellDef="let item" mat-cell>
+                    {{item.unote}}
+                </td>
+            </ng-container>
+
+            <!-- Starred -->
+            <ng-container matColumnDef="starred">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+                <td *matCellDef="let item" class="w-10" mat-cell>
+                    <button (click)="toggleStar($event, item)" mat-icon-button type="button">
+                  <mat-icon *ngIf="item.starred" [icIcon]="icStar" class="text-amber-500"></mat-icon>
+                  <mat-icon *ngIf="!item.starred" [icIcon]="icStarBorder"></mat-icon>
+                </button>
+                </td>
+            </ng-container>
+
+            <!-- Actions -->
+            <ng-container matColumnDef="actions">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
+                <td *matCellDef="let item" class="w-10" mat-cell>
+                    <button (click)="$event.stopPropagation()" [matMenuTriggerData]="{ account: item }" [matMenuTriggerFor]="contactMenu" mat-icon-button type="button">
+                  <mat-icon [icIcon]="icMoreVert"></mat-icon>
+                </button>
+                </td>
+            </ng-container>
+
+            <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+            <tr [class.font-medium]="!row.read" (click)="openAccount(row)" *matRowDef="let row; columns: displayedColumns;" @fadeInUp class="hover:bg-hover cursor-pointer" mat-row></tr>
+        </table>
+
+        <mat-spinner [diameter]="20" *ngIf="dataSource.loading$ | async"></mat-spinner>
+        <mat-paginator [fxHide]="!(dataSource.loading$ | async)&& !dataSource.hasItems" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [length]="dataSource.paginatorTotal$ | async" [showFirstLastButtons]="true"></mat-paginator>
+
+
+        <div *ngIf="!(dataSource.loading$ | async) && !dataSource.hasItems" @scaleFadeIn fxFlex="auto" fxLayout="column" fxLayoutAlign="center center">
+            <img class="m-12 h-64" src="assets/img/illustrations/idea.svg">
+            <h2 class="headline m-0 text-center">Hesap bulunamadı.</h2>
+        </div>
+
+    </div>
+</div>
+
+<mat-menu #contactMenu="matMenu" xPosition="before" yPosition="below">
+    <ng-template let-account="account" matMenuContent>
+        <button (click)="openAccount(account)" mat-menu-item>
+          <mat-icon [icIcon]="icEdit"></mat-icon>
+          <span>Hesabı Düzenle</span>
+        </button>
+
+        <button (click)="deleteAccount(account)" mat-menu-item>
+          <mat-icon [icIcon]="icDeleteForever"></mat-icon>
+          <span>Hesabı Sil</span>
+        </button>
+    </ng-template>
+</mat-menu>

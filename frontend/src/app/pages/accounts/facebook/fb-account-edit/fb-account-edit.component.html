@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" (keyup.enter)="onSubmit()">
     <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
         <!-- <img *ngIf="contact?.imageSrc" [src]="contact?.imageSrc" class="avatar ltr:mr-5 rtl:ml-5"> -->
         <h2 class="headline m-0" fxFlex="auto">{{ form.get('uname').value || 'Yeni hesap oluştur' }}</h2>
@@ -75,6 +75,7 @@
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
+        <small class="text-secondary">Hızlı işlem için "Enter - ESC" kullanabilirsin.</small>
         <button mat-button mat-dialog-close type="button">İPTAL</button>
         <button *ngIf="!isUpdate" color="primary" mat-button type="submit">HESAP OLUŞTUR</button>
         <button *ngIf="isUpdate" color="primary" mat-button type="submit">HESABI DÜZENLE</button>

@@ -70,8 +70,6 @@ export class FbAccountEditComponent implements OnInit {
   ngOnInit() {
 
     this.formCreate();
-    this.form.patchValue({ category: this.mData.account_category, _ref: this.mData.account_user.unumber });
-
 
     if (this.mData.account_id) {
       this.isUpdate = true;
@@ -89,6 +87,8 @@ export class FbAccountEditComponent implements OnInit {
       }
 
     }
+
+    this.form.patchValue({ category: this.mData.account_category, _ref: this.mData.account_user.unumber });
 
 
   }

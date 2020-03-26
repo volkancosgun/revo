@@ -2,7 +2,7 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-let demo = false;
+let demo = true;
 let appUrl = '';
 
 if(demo) {

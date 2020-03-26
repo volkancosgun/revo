@@ -36,6 +36,7 @@ export class ToolbarUserComponent implements OnInit {
 
   ngOnInit() {
 
+    
     /* interval(10000)
       .pipe(
         startWith(0),

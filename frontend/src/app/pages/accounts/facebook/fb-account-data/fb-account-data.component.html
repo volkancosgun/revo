@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <table [@stagger]="dataSource.filteredData" [dataSource]="dataSource" class="w-full" fxFlex="auto" mat-table matSort>
+        <table [@stagger]="dataSource.baseFilter" [dataSource]="dataSource" class="w-full" fxFlex="auto" mat-table matSort>
 
             <!--- Note that these columns can be defined in any order.
                   The actual rendered columns are set as a property on the row definition" -->

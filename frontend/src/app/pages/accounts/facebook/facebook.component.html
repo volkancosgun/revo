@@ -6,7 +6,7 @@
                   </button>
             <!-- fb-bot-->
             <!-- <vex-fb-bot></vex-fb-bot> -->
-            <button (click)="openBot()">BOT EKRANI</button>
+            <!-- <button (click)="openBot()">BOT EKRANI</button> -->
             <h2 class="headline text-primary-contrast-500 m-0 flex items-center w-full max-w-xxxs mr-6">
                 <ic-icon @scaleIn [icon]="icContacts" class="hidden sm:block"></ic-icon>
                 <span @fadeInRight class="ml-4 block">Hesaplar</span>
@@ -32,9 +32,10 @@
 
                 <div class="card h-full overflow-hidden flex-auto">
 
-                    <vex-fb-account-data *ngIf="!isLoading" [categoryData]="activeCategory" (moveAccounts)="moveAccounts($event)" (deleteAccounts)="deleteAccounts($event)" (deleteAccount)="deleteAccount($event)" (openAccount)="openAccount($event)" (toggleStar)="toggleStar($event)"
-                        [columns]="tableColumns" [data]="tableData" [searchStr]="searchStr$ | async"></vex-fb-account-data>
-                    <mat-card *ngIf="isLoading" style="display: flex; justify-content: center; align-items: center">
+                    <!--  <vex-fb-account-data *ngIf="!isLoading" [categoryData]="activeCategory" (moveAccounts)="moveAccounts($event)" (deleteAccounts)="deleteAccounts($event)" (deleteAccount)="deleteAccount($event)" (openAccount)="openAccount($event)" (toggleStar)="toggleStar($event)"
+                        [columns]="tableColumns" [data]="tableData" [searchStr]="searchStr$ | async"></vex-fb-account-data> -->
+                    <vex-fb-account-data-server [createAccount]="createAcc" [userData]="selectUser" [categoryData]="activeCategory" [columns]="tableColumns" [searchStr]="searchStr$ | async"></vex-fb-account-data-server>
+                    <!-- <mat-card *ngIf="isLoading" style="display: flex; justify-content: center; align-items: center">
 
                         <mat-card-content>
 
@@ -45,7 +46,7 @@
 
                         </mat-card-content>
 
-                    </mat-card>
+                    </mat-card> -->
                     <!-- <vex-contacts-data-table (openContact)="openContact($event)"
                                                (toggleStar)="toggleStar($event)"
                                                [columns]="tableColumns"

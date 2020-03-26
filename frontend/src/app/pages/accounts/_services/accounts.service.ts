@@ -1,18 +1,45 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpBackend } from '@angular/common/http';
+import { HttpClient, HttpBackend, HttpParams } from '@angular/common/http';
 import { FbAccount } from '../_models/fb-account';
-import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { TableParamsModel } from 'src/app/_models/table/models/table-params.model';
+import { TableResultsModel } from 'src/app/_models/table/models/table-results.model';
+import { Observable, forkJoin, of } from 'rxjs';
+import { mergeMap, map } from 'rxjs/operators';
+import { AccountModel } from 'src/app/pages/accounts/_models/account.model';
 
 @Injectable()
 export class AccountsService {
-
+    lastFilter$: BehaviorSubject<TableParamsModel> = new BehaviorSubject(new TableParamsModel({}, 'desc', '', 0, 10));
     constructor(
         private _http: HttpClient,
         private handler: HttpBackend
     ) {
 
     }
+
+    getAccounts(tableParams: TableParamsModel, cat:string, ref:string): Observable<TableResultsModel> {
+
+        let _params = new HttpParams()
+            .set('filter', JSON.stringify(tableParams.filter))
+            .set('category', cat)
+            .set('ref', ref)
+            .set('sortOrder', tableParams.sortOrder)
+            .set('sortField', tableParams.sortField)
+            .set('pageNumber', tableParams.pageNumber.toString())
+            .set('pageSize', tableParams.pageSize.toString());
+
+            return this._http.get<TableResultsModel>(`${environment.apiUrl}/accounts/customListing`, { params: _params });
+
+        /* return this._http.get(`${environment.apiUrl}/accounts/customListing`, { params: _params }).pipe(
+            map(res => res["items"])
+        ); */
+
+		/* return this._http.get<AccountModel[]>(`${environment.apiUrl}/accounts/customListing`, { params: _params }).pipe(
+			mergeMap(res => of(new TableResultsModel(res)))
+		); */
+	}
 
     getListingAccounts(cat?: number, ref?: string): Observable<FbAccount[]> {
         let ek = '';
