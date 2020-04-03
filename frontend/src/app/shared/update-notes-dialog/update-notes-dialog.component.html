@@ -1,0 +1,19 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between center">
+    <div>REVO {{_appVersion}} güncelleme notları</div>
+</div>
+
+<mat-dialog-content>
+    <ul>
+        <li *ngFor="let note of notes;">
+            <div style="margin-bottom:5px">
+                <h5><strong class="text-red-500"> {{note.id}})</strong> {{note.title}}</h5>
+                <p class="text-secondary" [innerHtml]="note.msg"></p>
+            </div>
+        </li>
+    </ul>
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="updateConfirm()">ANLADIM</button>
+</mat-dialog-actions>

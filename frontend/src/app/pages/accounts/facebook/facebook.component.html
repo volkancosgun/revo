@@ -31,27 +31,7 @@
                 <vex-fb-table-menu (categoryChange)="categoryChanged($event)" (userChange)="userChanged($event)" (filterChange)="setData($event)" (openAddNew)="openAccount()" class="hidden sm:block mr-6"></vex-fb-table-menu>
 
                 <div class="card h-full overflow-hidden flex-auto">
-
-                    <!--  <vex-fb-account-data *ngIf="!isLoading" [categoryData]="activeCategory" (moveAccounts)="moveAccounts($event)" (deleteAccounts)="deleteAccounts($event)" (deleteAccount)="deleteAccount($event)" (openAccount)="openAccount($event)" (toggleStar)="toggleStar($event)"
-                        [columns]="tableColumns" [data]="tableData" [searchStr]="searchStr$ | async"></vex-fb-account-data> -->
-                    <vex-fb-account-data-server [createAccount]="createAcc" [userData]="selectUser" [categoryData]="activeCategory" [columns]="tableColumns" [searchStr]="searchStr$ | async"></vex-fb-account-data-server>
-                    <!-- <mat-card *ngIf="isLoading" style="display: flex; justify-content: center; align-items: center">
-
-                        <mat-card-content>
-
-                            <mat-progress-spinner color="primary" mode="indeterminate">
-                            </mat-progress-spinner>
-
-
-
-                        </mat-card-content>
-
-                    </mat-card> -->
-                    <!-- <vex-contacts-data-table (openContact)="openContact($event)"
-                                               (toggleStar)="toggleStar($event)"
-                                               [columns]="tableColumns"
-                                               [data]="tableData"
-                                               [searchStr]="searchStr$ | async"></vex-contacts-data-table> -->
+                    <vex-fb-account-data-server [createAccount]="createAcc" [userData]="selectUser" [categoryData]="activeCategory" [searchStr]="searchStr$ | async"></vex-fb-account-data-server>
                 </div>
             </mat-drawer-content>
 

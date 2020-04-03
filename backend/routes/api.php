@@ -33,6 +33,7 @@ Route::group([
 
     Route::get('list', 'Accounts\AccountsController@index');
     Route::get('customListing', 'Accounts\AccountsController@customListing');
+    Route::get('totals', 'Accounts\AccountsController@totalCounts');
     Route::get('listing/{cat?}/{ref?}', 'Accounts\AccountsController@customList');
     Route::get('changeStarred/{account_id?}/{starred?}', 'Accounts\AccountsController@starredChange');
     Route::get('changeRead/{account_id?}/{read?}', 'Accounts\AccountsController@readChange');

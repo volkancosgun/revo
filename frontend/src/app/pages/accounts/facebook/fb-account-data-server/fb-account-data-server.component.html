@@ -24,9 +24,48 @@
 
             <div fx-layout="row" fx-flex fx-layout-align="end">
                 <h2 class="title my-0 ltr:pr-4 ltr:mr-4" fxFlex="none" xHide.xs>
-                    <small class="text-secondary" *ngIf="selection.isEmpty()">Bu kategoride toplam <strong class="text-red-500">{{dataSource.paginatorTotal$ | async}}</strong> hesap bulundu.</small>
+                    <small class="text-secondary" *ngIf="selection.isEmpty()">Toplam <strong class="text-red-500">{{dataSource.paginatorTotal$ | async}}</strong> hesaplar.</small>
                 </h2>
             </div>
+
+            <span fxFlex></span>
+
+            <!-- <mat-form-field fxFlex="none">
+                <mat-label>Ülke seçin</mat-label>
+                <mat-select [(value)]="filterCountry" (selectionChange)="loadData()">
+                    <mat-option value="">TÜMÜ</mat-option>
+                    <mat-option value="TURKEY">- TÜRKİYE</mat-option>
+                    <mat-option value="ITALY">- İTALYA</mat-option>
+                    <mat-option value="FRANCE">- FRANSA</mat-option>
+                    <mat-option value="GREECE">- YUNANİSTAN</mat-option>
+                </mat-select>
+            </mat-form-field> -->
+
+            <!-- <span fxFlex></span> -->
+
+            <!-- <mat-form-field fxFlex>
+                <mat-label>TÜM DİLLER</mat-label>
+                <mat-select [(value)]="filterLanguage" (selectionChange)="loadData()">
+                    <mat-option value="">TÜM DİLLER</mat-option>
+                    <mat-option value="TR">Türkçe</mat-option>
+                    <mat-option value="IT">İtalyanca</mat-option>
+                    <mat-option value="FR">Fransızca</mat-option>
+                    <mat-option value="GR">Yunanca</mat-option>
+                </mat-select>
+            </mat-form-field> -->
+
+            <!-- <span fxFlex></span> -->
+            <button (click)="loadData()" class="ml-4" fxFlex="none" mat-icon-button matTooltip="Yenile" type="button">
+                    <mat-icon [icIcon]="icRefresh"></mat-icon>
+                  </button>
+            <button [matMenuTriggerFor]="selectFilterMenu" class="ml-4" fxFlex="none" mat-icon-button matTooltip="Ülkeye göre" type="button">
+                <mat-icon [icIcon]="icFilterCountry"></mat-icon>
+              </button>
+            <span *ngIf="filterCountry">{{filterCountry}}</span>
+            <button [matMenuTriggerFor]="columnFilterMenu" class="ml-4" fxFlex="none" mat-icon-button matTooltip="Sütunları Filtrele" type="button">
+                <mat-icon [icIcon]="icFilterList"></mat-icon>
+              </button>
+
         </div>
 
         <!-- TABLE -->
@@ -113,8 +152,8 @@
                 </td>
             </ng-container>
 
-            <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-            <tr [class.font-medium]="!row.read" (click)="openAccount(row)" *matRowDef="let row; columns: displayedColumns;" @fadeInUp class="hover:bg-hover cursor-pointer" mat-row></tr>
+            <tr *matHeaderRowDef="visibleColumns" mat-header-row></tr>
+            <tr [class.font-medium]="!row.read" (click)="openAccount(row)" *matRowDef="let row; columns: visibleColumns;" @fadeInUp class="hover:bg-hover cursor-pointer" mat-row></tr>
         </table>
 
         <mat-spinner [diameter]="20" *ngIf="dataSource.loading$ | async"></mat-spinner>
@@ -141,4 +180,28 @@
           <span>Hesabı Sil</span>
         </button>
     </ng-template>
+</mat-menu>
+
+<mat-menu #columnFilterMenu="matMenu" xPosition="before" yPosition="below">
+    <button (click)="toggleColumnVisibility(column, $event)" *ngFor="let column of displayedColumns" class="checkbox-item mat-menu-item">
+          <mat-checkbox (click)="$event.stopPropagation()" [(ngModel)]="column.visible" color="primary">
+            {{ column.label }}
+          </mat-checkbox>
+        </button>
+</mat-menu>
+
+<mat-menu #selectFilterMenu="matMenu" xPosition="before" yPosition="below" [hasBackdrop]="false" [overlapTrigger]="false">
+
+    <mat-form-field fxFlex="none" class="menu-filter-country">
+        <mat-label>Ülkeye göre filtrele</mat-label>
+        <mat-select [(value)]="filterCountry" (selectionChange)="loadData()">
+            <mat-option value="">TÜMÜ</mat-option>
+            <mat-option value="TURKEY">- TÜRKİYE</mat-option>
+            <mat-option value="ITALY">- İTALYA</mat-option>
+            <mat-option value="FRANCE">- FRANSA</mat-option>
+            <mat-option value="GREECE">- YUNANİSTAN</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+
 </mat-menu>

@@ -52,6 +52,14 @@ export class AccountsService {
         return this._http.get<FbAccount[]>(`${environment.apiUrl}/accounts/listing?${ek}`);
     }
 
+    getTotals(ref?:string) {
+        let ek = '';
+        if (ref != null) {
+            ek += '&_ref=' + ref;
+        }
+        return this._http.get<FbAccount[]>(`${environment.apiUrl}/accounts/totals?${ek}`);
+    }
+
     changeStarredAccount(account_id: number, starred: boolean) {
 
         return this._http.get(`${environment.apiUrl}/accounts/changeStarred?account_id=${account_id}&starred=${starred}`);

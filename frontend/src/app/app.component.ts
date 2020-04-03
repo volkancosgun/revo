@@ -1,4 +1,4 @@
-import { Component, Inject, LOCALE_ID, Renderer2 } from '@angular/core';
+import { Component, Inject, LOCALE_ID, Renderer2, OnInit } from '@angular/core';
 import { ConfigName, ConfigService } from '../@vex/services/config.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { Settings } from 'luxon';
@@ -28,13 +28,16 @@ import { AuthenticationService } from './shared/authentication.service';
 import { Jwt } from './_models/jwt';
 import { Role } from './_models/role';
 import theme from '../@vex/utils/tailwindcss';
+import { environment } from 'src/environments/environment';
+import { MatDialog } from '@angular/material';
+import { UpdateNotesDialogComponent } from './shared/update-notes-dialog/update-notes-dialog.component';
 
 @Component({
   selector: 'vex-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'vex';
 
   currentUser: Jwt;
@@ -50,7 +53,8 @@ export class AppComponent {
     private route: ActivatedRoute,
     private navigationService: NavigationService,
     private splashScreenService: SplashScreenService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private dialog: MatDialog
   ) {
 
     this.authService.currentUser.subscribe(x => this.currentUser = x);
@@ -151,6 +155,15 @@ export class AppComponent {
     }); */
 
 
+    
+
+
+
+  }
+
+  ngOnInit(): void {
+
+ 
 
   }
 

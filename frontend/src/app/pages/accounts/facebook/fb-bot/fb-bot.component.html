@@ -37,7 +37,6 @@
 
 <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close type="button">İPTAL</button>
-    <button (click)="getErrorDatas()" color="error" mat-button>HATALI OLANLARI GÖSTER</button>
+    <button (click)="stopBot()" color="primary" mat-button>DURDUR</button>
     <button (click)="startBot()" [disabled]="isBot" color="primary" mat-button>BAŞLAT</button>
-    <button (click)="stopBot()" *ngIf="isBot" color="primary" mat-button>DURDUR</button>
 </mat-dialog-actions>

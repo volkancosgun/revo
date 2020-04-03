@@ -6,7 +6,7 @@ import { MatPaginator, MatSort, MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefa
 import { SelectionModel } from '@angular/cdk/collections';
 import { AccountsService } from '../../_services/accounts.service';
 import { merge, fromEvent } from 'rxjs';
-import { tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { tap, debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 import { TableParamsModel } from 'src/app/_models/table/models/table-params.model';
 import { stagger20ms } from 'src/@vex/animations/stagger.animation';
 import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
@@ -18,6 +18,10 @@ import icMoreVert from '@iconify/icons-ic/twotone-more-vert';
 import icEdit from '@iconify/icons-ic/twotone-edit';
 import icMove from '@iconify/icons-ic/twotone-move-to-inbox';
 import icDeleteForever from '@iconify/icons-ic/twotone-delete-forever';
+import icFilterList from '@iconify/icons-ic/twotone-filter-list';
+import icFilterCountry from '@iconify/icons-ic/twotone-find-in-page';
+import icRefresh from '@iconify/icons-ic/twotone-refresh'; 
+
 import { User } from 'src/app/_models/user';
 import { AuthenticationService } from 'src/app/shared/authentication.service';
 import { FbTableMenu } from '../../_models/fb-table-menu';
@@ -28,6 +32,9 @@ import { FbAccountEditComponent } from '../fb-account-edit/fb-account-edit.compo
 import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-dialog/confirmation-dialog.component';
 import { FbAccountMoveComponent } from '../fb-account-move/fb-account-move.component';
 import { ProgressDialogComponent } from 'src/app/shared/progress-dialog/progress-dialog.component';
+
+import * as _ from 'lodash';
+import { isArray } from 'util';
 
 @Component({
   selector: 'vex-fb-account-data-server',
@@ -64,13 +71,32 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
 
   dataSource: AccountDataSource;
   dataResult: FbAccount[] = [];
-  displayedColumns = ['checkbox', 'created_at', 'uname', 'upass', 'country', 'lang', 'unote', 'starred', 'actions'];
-  visibleColumns: Array<keyof FbAccount | string>;
+
+  displayedColumns: TableColumn<AccountModel>[] = [
+    { label: 'Checkbox', property: 'checkbox', type: 'checkbox', visible: true },
+    { label: 'TARİH', property: 'created_at', type: 'text', visible: true },
+    { label: 'LOGIN', property: 'uname', type: 'text', visible: true },
+    { label: 'PASS', property: 'upass', type: 'text', visible: true },
+    { label: 'ÜLKE', property: 'country', type: 'text', visible: true },
+    { label: 'DİL', property: 'lang', type: 'text', visible: true },
+    { label: 'NOT', property: 'unote', type: 'text', visible: true },
+    { label: 'yok', property: 'starred', type: 'text', visible: true },
+    { label: 'İşlemler', property: 'actions', type: 'button', visible: true }
+    /* { label: 'Ad Soyad', property: 'name', type: 'text', visible: true, cssClasses: ['font-medium'] },
+    { label: 'Email', property: 'mail', type: 'text', visible: false },
+    { label: 'İşlemler', property: 'actions', type: 'button', visible: true } */
+  ];
+
+  //displayedColumns = ['checkbox', 'created_at', 'uname', 'upass', 'country', 'lang', 'unote', 'starred', 'actions'];
+  //visibleColumns: Array<keyof FbAccount | string>;
 
   filterStatus: number = 0;
   selection = new SelectionModel<FbAccount>(true, []);
   category: FbTableMenu;
   accCats: FbTableMenu[] = AccCats;
+
+  filterCountry: string = '';
+  filterLanguage: string = '';
 
   icMoreVert = icMoreVert;
   icStar = icStar;
@@ -78,6 +104,9 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
   icDeleteForever = icDeleteForever;
   icEdit = icEdit;
   icMove = icMove;
+  icFilterList = icFilterList;
+  icFilterCountry = icFilterCountry;
+  icRefresh = icRefresh;
 
   constructor(
     private authService: AuthenticationService,
@@ -85,6 +114,10 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
     private dialog: MatDialog,
     private bar: MatSnackBar
   ) { }
+
+  get visibleColumns() {
+    return this.displayedColumns.filter(column => column.visible).map(column => column.property);
+  }
 
   ngOnInit() {
 
@@ -104,6 +137,11 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
     this.dataSource.loadAccounts(tableParams, this.categoryData, this.userData.unumber);
     this.dataSource.entitySubject.subscribe(res => (this.dataResult = res));
 
+    
+    setTimeout(() => {
+      this.categoryTotals();
+    }, 2000);
+
 
   }
 
@@ -111,18 +149,61 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
     if (this.dataSource) {
 
       if (changes.categoryData || changes.userData || changes.searchStr) {
+        
         this.category = this.accCats[this.categoryData - 1];
         this.paginator.pageIndex = 0;
+        this.filterCountry = '';
         this.loadData();
+
       }
 
       if (changes.createAccount) {
         this.openAccount();
       }
 
+      this.selection.clear();
+      this.categoryTotals();
+
     }
 
 
+  }
+
+  categoryTotals() {
+  
+    for (let i = 0; i < 9; i++) {
+      this.accCats[i].count = 0;
+    }
+
+    this.accService.getTotals(this.userData.unumber).subscribe((res:any) => {
+
+      res.forEach((value: any) => {
+        this.accCats[value.category - 1].count = this.kFormatter(value.count);
+      });
+
+    });
+
+  }
+
+  kFormatter(number) {
+
+    const SI_SYMBOL = ["", "K", "M", "G", "T", "P", "E"];
+
+    // what tier? (determines SI symbol)
+    var tier = Math.log10(number) / 3 | 0;
+
+    // if zero, we don't need a suffix
+    if (tier == 0) return number;
+
+    // get suffix and determine scale
+    var suffix = SI_SYMBOL[tier];
+    var scale = Math.pow(10, tier * 3);
+
+    // scale the number
+    var scaled = number / scale;
+
+    // format number and add suffix
+    return scaled.toFixed(1) + suffix;
   }
 
   loadData() {
@@ -137,16 +218,28 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
 
     this.dataSource.loadAccounts(tableParams, this.categoryData, this.userData.unumber);
 
+
   }
 
   filterConfig(): any {
     const filter: any = {};
     const searchText: string = this.searchStr;
 
+    if (this.filterCountry) {
+      filter.country = this.filterCountry;
+    }
+
+    if (this.filterLanguage) {
+      filter.lang = this.filterLanguage;
+    }
+
+
     if (searchText) {
       filter.uname = searchText;
       filter.upass = searchText;
       filter.unote = searchText;
+      filter.country = searchText;
+      filter.lang = searchText;
     }
 
     return filter;
@@ -337,6 +430,7 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
 
         this.selection.clear();
         this.bar.open('Taşıma işlemi başarıyla tamamlandı.', 'OK!', { duration: 5000 });
+        this.categoryTotals();
       }
 
     });
@@ -350,6 +444,13 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
 
     this.dataSource.entitySubject.next(this.dataResult);
     this.dataSource.paginatorTotalSubject.next(this.dataResult.length);
+  }
+
+  toggleColumnVisibility(column, event) {
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+
+    column.visible = !column.visible;
   }
 
 }

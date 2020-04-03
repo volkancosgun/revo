@@ -28,6 +28,8 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { FbBotComponent } from 'src/app/pages/accounts/facebook/fb-bot/fb-bot.component';
 import { distinctUntilChanged, tap } from 'rxjs/operators';
 import { fromEvent } from 'rxjs';
+import { UpdateNotesDialogComponent } from 'src/app/shared/update-notes-dialog/update-notes-dialog.component';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'vex-facebook',
@@ -70,6 +72,60 @@ export class FacebookComponent implements OnInit {
 
     this.selectUser = this.me;
 
+    const _appVersion = environment.version;
+    const _locVersion = localStorage.getItem('app_version');
+
+    if(_locVersion != _appVersion) {
+
+      let _updateData = [
+        {
+          id:1,
+          title: '[Hesaplar Modulü] Kaydırma çubuğu',
+          msg: 'Hesap listeleme tablosunda notlar çok fazla uzun yazıldığı zaman sağdaki işlem butonları gözükmüyordu. Kaydırma çubuğu (soldan-sağa) eklenerek bu sorun ortadan kaldırıldı.'
+        },
+        {
+          id: 2,
+          title: '[Hesaplar Modulü] Hesap sayıları',
+          msg: 'Her kategorinin üzerinde mevcut toplam hesap sayılarını gösteren rozetler eklendi. (sildiğiniz hesaplar hariçtir)'
+        },
+        {
+          id: 3,
+          title: '[Hesaplar Modulü] Yenileme butonu',
+          msg: 'Verileri yenileme butonu tablonun sağ üst kısmına eklendi.'
+        },
+        {
+          id: 4,
+          title: '[Hesaplar Modulü] Ülke bazlı filtreleme',
+          msg: 'Verileri ülke bazlı filtreleme butonu tablonun sağ üst kısmına eklendi.'
+        },
+        {
+          id: 5,
+          title: '[Hesaplar Modulü] Sütünları gizle/göster',
+          msg: 'Hesaplar tablo sütunlarını gösterme ve gizleme butonu tablonun sağ üst kısmına eklendi.'
+        },
+        {
+          id: 6,
+          title: '[PHP BACKEND] API Yetkilendirme',
+          msg: 'Arka uca bir yetkilendirme kontrol servisi kuruldu. Böylece hesaplara kullanıcı tokeni olmayan (kayıtsız) erişimler reddedilecek.'
+        }
+      ]
+
+      const _dialogRef = this.dialog.open(UpdateNotesDialogComponent, {
+        disableClose: true,
+        width: '640px',
+        data: _updateData
+      });
+
+    }
+
+  }
+
+  setData(e) {
+    console.log(e);
+  }
+
+  filterChange(e) {
+    console.log('filter')
   }
 
   updateData(data: FbAccount, index: number) {

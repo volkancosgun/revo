@@ -15,13 +15,14 @@ import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confir
 import { MatButtonModule, MatDialogModule, MatIconModule, MatProgressBarModule, MatProgressSpinnerModule } from '@angular/material';
 import { IconModule } from '@visurel/iconify-angular';
 import { ProgressDialogComponent } from './shared/progress-dialog/progress-dialog.component';
-
+import { UpdateNotesDialogComponent } from './shared/update-notes-dialog/update-notes-dialog.component';
 
 @NgModule({
-  declarations: [AppComponent, ConfirmationDialogComponent, ProgressDialogComponent],
+  declarations: [AppComponent, ConfirmationDialogComponent, ProgressDialogComponent, UpdateNotesDialogComponent],
   entryComponents: [
     ConfirmationDialogComponent,
-    ProgressDialogComponent
+    ProgressDialogComponent,
+    UpdateNotesDialogComponent
   ],
   imports: [
     BrowserModule,

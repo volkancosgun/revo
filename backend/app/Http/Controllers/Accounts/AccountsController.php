@@ -7,12 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountRequest;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AccountsController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth.role:user,admin', ['except' => ['create']]);
+        $this->middleware('auth.role:user,admin', ['except' => ['storeWeb']]);
     }
 
     public function index()
@@ -126,20 +127,41 @@ class AccountsController extends Controller
         $_filters_docede = json_decode($_filters);
 
         if (count((array) $_filters_docede) >= 1) {
-
+            //$totalData = $accounts->count();
+            $tdata = 0;
             foreach ($_filters_docede as $key => $term) {
-                $accounts = Accounts::where(function($query) use ($key, $term){
+
+                $acc = Accounts::where(function ($query) use ($key, $term) {
                     $query->where('uname', "LIKE", "%{$term}%")
-                    ->orWhere('upass', "LIKE", "%{$term}%")
-                    ->orWhere('unote', "LIKE", "%{$term}%");
-                })->offset($offset)
-                ->where($_accWhere)
-                ->limit($_pageSize)
-                ->orderBy($_sortField, $_sortOrder)
-                ->get();
+                        ->orWhere('upass', "LIKE", "%{$term}%")
+                        ->orWhere('country', "LIKE", "%{$term}%")
+                        ->orWhere('lang', "LIKE", "%{$term}%")
+                        ->orWhere('unote', "LIKE", "%{$term}%");
+                });
+
+                $totalData = $acc->where($_accWhere)->count();
+                $accounts = $acc->offset($offset)
+                    ->where($_accWhere)
+                    ->limit($_pageSize)
+                    ->orderBy($_sortField, $_sortOrder)
+                    ->get();
+
+                /* $accounts = Accounts::where(function($query) use ($key, $term){
+            $query->where('uname', "LIKE", "%{$term}%")
+            ->orWhere('upass', "LIKE", "%{$term}%")
+            ->orWhere('country', "LIKE", "%{$term}%")
+            ->orWhere('lang', "LIKE", "%{$term}%")
+            ->orWhere('unote', "LIKE", "%{$term}%");
+            })->offset($offset)
+            ->where($_accWhere)
+            ->limit($_pageSize)
+            ->orderBy($_sortField, $_sortOrder)
+            ->get();
+
+            $tdata = $accounts->count(); */
             }
 
-            $totalData = $accounts->count();
+            //$totalData = $tdata;
 
         } else {
             $accounts = Accounts::offset($offset)
@@ -231,6 +253,52 @@ class AccountsController extends Controller
             ]);
 
         return response()->json($movCat, 200);
+
+    }
+
+    public function totalCounts(Request $request)
+    {
+
+        $ref = $request->input('_ref');
+
+        if ($ref) {
+            $accWhere = ['_ref' => $ref, 'status' => 1];
+        } else {
+            $accWhere = ['status' => 1];
+        }
+
+        $datas = Accounts::where($accWhere)
+            ->whereNotIn('category', [1])
+            ->groupBy('category')
+            ->orderBy('category', 'DESC')
+            ->get(array(
+                DB::raw('category AS `cat`'),
+                DB::raw('COUNT(*) as `count`'),
+            ));
+
+        $data = array();
+        $i = 0;
+        foreach ($datas as $key => $row) {
+
+            $data[$i]['category'] = $row->cat;
+            $data[$i]['count'] = $row->count;
+            $i++;
+            //$data[$row->cat]['count'] = $row->count;
+
+            /* if ($row->cat != 1) {
+        $data[$i]['category'] = $row->cat;
+        $data[$i]['count'] = $row->count;
+        }else{
+        $i-1;
+        }
+
+        $i++; */
+        }
+
+        $data[$i]['category'] = 1;
+        $data[$i]['count'] = Accounts::where(['category' => 1, 'status' => 1])->count();
+
+        return response()->json($data, 200);
 
     }
 }

@@ -2,7 +2,7 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-let demo = true;
+let demo = false;
 let appUrl = '';
 
 if(demo) {
@@ -13,7 +13,8 @@ if(demo) {
 
 export const environment = {
   production: false,
-  apiUrl: appUrl
+  apiUrl: appUrl,
+  version: '1.0.2'
 };
 
 /*

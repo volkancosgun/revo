@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ContainerModule } from 'src/@vex/directives/container/container.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { FbTableMenuComponent } from './facebook/fb-table-menu/fb-table-menu.component';
-import { MatFormFieldModule, MatOptionModule, MatSelectModule, MatDialogModule, MatSnackBarModule, MatProgressBarModule, MatCardModule, MatProgressSpinnerModule, MatListModule } from '@angular/material';
+import { MatFormFieldModule, MatOptionModule, MatSelectModule, MatDialogModule, MatSnackBarModule, MatProgressBarModule, MatCardModule, MatProgressSpinnerModule, MatListModule, MatBadgeModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule }    from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
 import { AdminService } from '../admin/_services/admin.service';
@@ -17,7 +17,6 @@ import { FbAccountEditComponent } from './facebook/fb-account-edit/fb-account-ed
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-import { FbAccountDataComponent } from './facebook/fb-account-data/fb-account-data.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -31,7 +30,6 @@ import { FbAccountDataServerComponent } from './facebook/fb-account-data-server/
     FacebookComponent,
     FbTableMenuComponent,
     FbAccountEditComponent,
-    FbAccountDataComponent,
     FbAccountMoveComponent,
     FbBotComponent,
     FbAccountDataServerComponent
@@ -67,7 +65,8 @@ import { FbAccountDataServerComponent } from './facebook/fb-account-data-server/
     MatCardModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    MatListModule
+    MatListModule,
+    MatBadgeModule
   ],
   providers: [
     AccountsService,

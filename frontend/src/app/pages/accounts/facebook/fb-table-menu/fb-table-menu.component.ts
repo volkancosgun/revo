@@ -18,6 +18,7 @@ import { AuthenticationService } from 'src/app/shared/authentication.service';
 import { AdminService } from 'src/app/pages/admin/_services/admin.service';
 import { AccCats } from 'src/environments/acc-cats';
 import { FbTableMenu } from 'src/app/pages/accounts/_models/fb-table-menu';
+import { AccountsService } from '../../_services/accounts.service';
 
 
 @Component({
@@ -28,7 +29,7 @@ import { FbTableMenu } from 'src/app/pages/accounts/_models/fb-table-menu';
 })
 export class FbTableMenuComponent implements OnInit {
 
-  me : User = this.authService.currentUserValue.user;
+  me: User = this.authService.currentUserValue.user;
   users: User[];
 
   @Input() items: FbTableMenu[];
@@ -38,7 +39,7 @@ export class FbTableMenuComponent implements OnInit {
   @Output() categoryChange = new EventEmitter<any>();
 
   selectedUser;
-  selectedUserValue : User;
+  selectedUserValue: User;
 
   userName = this.authService.currentUserValue.user.name;
   activeCategory: FbTableMenu['id'] = 2;
@@ -47,23 +48,35 @@ export class FbTableMenuComponent implements OnInit {
 
   constructor(
     private authService: AuthenticationService,
-    private adminService: AdminService
+    private adminService: AdminService,
+    private accService: AccountsService
   ) { }
 
   ngOnInit() {
 
     this.selectedUser = this.me.id;
 
-    if(this.me.role == 'admin') {
-        this.adminService.getAllUser().subscribe((data: User[]) => {
-          this.users = data;
-        })
+    if (this.me.role == 'admin') {
+      this.adminService.getAllUser().subscribe((data: User[]) => {
+        this.users = data;
+      })
     }
 
 
     this.items = AccCats;
     this.items[1].label = 'Hesaplarım (' + this.me.name + ')';
 
+  }
+
+  setBadgeColor(cat: FbTableMenu): string {
+
+    //console.log(cat);
+
+    if ((cat.id == 8) || (cat.id == 9)) {
+      return 'warn';
+    }
+
+    return 'primary';
   }
 
   setFilter(cat: FbTableMenu['id']) {
@@ -78,7 +91,15 @@ export class FbTableMenuComponent implements OnInit {
 
     this.items[1].label = 'Hesaplarım (' + user.name + ')';
 
+    this.userUpdateCatCounts(user);
+
     this.userChange.emit(user);
+  }
+
+  userUpdateCatCounts(user: User) {
+    this.accService.getTotals(user.unumber).subscribe(res => {
+      console.log(res);
+    })
   }
 
   isActive(category: FbTableMenu['id']) {

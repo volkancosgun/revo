@@ -16,31 +16,36 @@ export const AccCats: FbTableMenu[] = [
         type: 'link',
         id: 1,
         icon: icViewHeadline,
-        label: 'Ortak Hesaplar'
+        label: 'Ortak Hesaplar',
+        count: 0
       },
       {
         type: 'link',
         id: 2,
         icon: icAccounts,
-        label: 'Hesaplarım'
+        label: 'Hesaplarım',
+        count: 0
       },
       {
         type: 'link',
         id: 3,
         icon: icStar,
-        label: 'Önemli'
+        label: 'Önemli',
+        count: 0
       },
       {
         type: 'link',
         id: 4,
         icon: icPage,
-        label: 'Sayfalı'
+        label: 'Sayfalı',
+        count: 0
       },
       {
         type: 'link',
         id: 5,
         icon: icNoPage,
-        label: 'Sayfasız'
+        label: 'Sayfasız',
+        count: 0
       },
       /* {
         type: 'subheading',
@@ -51,6 +56,7 @@ export const AccCats: FbTableMenu[] = [
         id: 6,
         icon: icLabel,
         label: 'Aktif',
+        count: 0,
         classes: {
           icon: 'text-green-500'
         }
@@ -60,6 +66,7 @@ export const AccCats: FbTableMenu[] = [
         id: 7,
         icon: icLabel,
         label: 'İşlemde',
+        count: 0,
         classes: {
           icon: 'text-primary-500'
         }
@@ -69,6 +76,7 @@ export const AccCats: FbTableMenu[] = [
         id: 8,
         icon: icLabel,
         label: 'Patlak',
+        count: 0,
         classes: {
           icon: 'text-red-500'
         }
@@ -78,6 +86,7 @@ export const AccCats: FbTableMenu[] = [
         id: 9,
         icon: icLabel,
         label: 'Çöp',
+        count: 0,
         classes: {
           icon: 'text-gray-500'
         }

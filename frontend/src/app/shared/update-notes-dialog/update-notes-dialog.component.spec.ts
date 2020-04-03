@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FbAccountDataComponent } from './fb-account-data.component';
+import { UpdateNotesDialogComponent } from './update-notes-dialog.component';
 
-describe('FbAccountDataComponent', () => {
-  let component: FbAccountDataComponent;
-  let fixture: ComponentFixture<FbAccountDataComponent>;
+describe('UpdateNotesDialogComponent', () => {
+  let component: UpdateNotesDialogComponent;
+  let fixture: ComponentFixture<UpdateNotesDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FbAccountDataComponent ]
+      declarations: [ UpdateNotesDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FbAccountDataComponent);
+    fixture = TestBed.createComponent(UpdateNotesDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
