@@ -20,7 +20,7 @@ import icMove from '@iconify/icons-ic/twotone-move-to-inbox';
 import icDeleteForever from '@iconify/icons-ic/twotone-delete-forever';
 import icFilterList from '@iconify/icons-ic/twotone-filter-list';
 import icFilterCountry from '@iconify/icons-ic/twotone-find-in-page';
-import icRefresh from '@iconify/icons-ic/twotone-refresh'; 
+import icRefresh from '@iconify/icons-ic/twotone-refresh';
 
 import { User } from 'src/app/_models/user';
 import { AuthenticationService } from 'src/app/shared/authentication.service';
@@ -137,7 +137,7 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
     this.dataSource.loadAccounts(tableParams, this.categoryData, this.userData.unumber);
     this.dataSource.entitySubject.subscribe(res => (this.dataResult = res));
 
-    
+
     setTimeout(() => {
       this.categoryTotals();
     }, 2000);
@@ -149,7 +149,7 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
     if (this.dataSource) {
 
       if (changes.categoryData || changes.userData || changes.searchStr) {
-        
+
         this.category = this.accCats[this.categoryData - 1];
         this.paginator.pageIndex = 0;
         this.filterCountry = '';
@@ -170,12 +170,12 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
   }
 
   categoryTotals() {
-  
+
     for (let i = 0; i < 9; i++) {
       this.accCats[i].count = 0;
     }
 
-    this.accService.getTotals(this.userData.unumber).subscribe((res:any) => {
+    this.accService.getTotals(this.userData.unumber).subscribe((res: any) => {
 
       res.forEach((value: any) => {
         this.accCats[value.category - 1].count = this.kFormatter(value.count);
@@ -266,7 +266,12 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
 
     this.dialog.open(FbAccountEditComponent, {
       data: { account_id: account.id || null, account_data: account, account_category: this.categoryData, account_user: this.userData },
-      width: '600px'
+      width: '100vw',
+      height: '100vh',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      hasBackdrop: false,
+      panelClass: 'custom-modalbox'
     }).afterClosed().subscribe((res: any) => {
 
       if (res && res.isUpdate === false) {
@@ -364,6 +369,9 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
 
               progressRef.close();
 
+              this.loadData();
+
+
             }
 
 
@@ -430,6 +438,7 @@ export class FbAccountDataServerComponent<AccountModel> implements OnInit, OnCha
 
         this.selection.clear();
         this.bar.open('Taşıma işlemi başarıyla tamamlandı.', 'OK!', { duration: 5000 });
+        this.loadData();
         this.categoryTotals();
       }
 
