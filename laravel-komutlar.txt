@@ -1,0 +1,68 @@
+Artisan komutları
+php artisan list
+Artisan üzerinde kullanabileceğiniz tüm komutları listeler.
+
+php artisan --version
+Laravel uygulamanızın sürümünü gösterir.
+
+php artisan down
+Uygulamanızı bakım moduna alır.
+
+php artisan env
+Bulunduğunuz "environment"i gösterir.
+
+php artisan migrate
+Veritabanı eşitleme işlemlerini yapar.
+
+php artisan migrate:rollback
+Veritabanında yaptığınız değişiklikleri adım adım geri alır.
+
+php artisan migrate:refresh
+Bütün yaptığınız değişiklikleri geri alır ve veritabanını yeniden yükler. (Verileriniz silinir)
+php artisan migrate:refresh --seed
+Refresh işlemini aynen gerçekleştirir ve database seederlarını da çalıştırır.
+
+php artisan serve
+Uygulamanızı başlatır.
+
+php artisan up
+Uygulamanızı bakım modundan çıkartır.
+
+php artisan cache:clear
+Uygulama önbelleğini temizler.
+
+php artisan cache:table
+Uygulamanızda veritabanı için önbellekleme oluşturur.
+
+php artisan config:cache
+Konfigürasyon dosyanızı hızlı yükleme için önbellekler.
+
+php artisan config:clear
+Konfigürasyon önbelleğini temizler.
+
+php artisan make:auth
+Laravel'in içerisinde gelen hazır kullanıcı sistemini uygulamanıza ekler.
+
+php artisan make:controller <Dizin/ControllerAdı>
+Sizin için istediğiniz isimde hazır bir controller oluşturur.
+
+php artisan make:controller <Dizin/ControllerAdı> --resource
+Hazır controller kalıbı ile controller oluşturmanızı sağlar.
+
+php artisan make:migration <MigrationAdı>
+Veritabanı için migration dosyası oluşturur.
+
+php artisan make:model <ModelAdı>
+Yeni bir Eloquent model nesnesi oluşturur.
+
+php artisan route:list
+Eklediğiniz ve vendor uygulamaların eklediği rotaları listeler.
+
+php artisan route:clear
+Rota önbelleğini temizler.
+
+php artisan route:cache
+Rotaları hızlı yükleme için önbellekler.
+
+php artisan view:clear
+Derlenmiş önyüz dosyalarını temizler. Bazen değişiklikler sayfada gözükmeyince gereklidir.
